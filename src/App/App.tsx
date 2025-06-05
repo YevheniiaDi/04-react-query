@@ -1,35 +1,84 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import ReactPaginate from 'react-paginate';
+import toast, { Toaster } from 'react-hot-toast';
+
+import SearchBar from '../SearchBar/SearchBar';
+import MovieList from '../MovieList/MovieList';
+import Loader from '../Loader/Loader';
+
+import { fetchMovies } from '../../services/movieService';
+import type { TMDBSearchResponse } from '../../types/movie';
+
+import styles from './App.module.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery<TMDBSearchResponse, Error>(
+    ['movies', query, page],
+    () => fetchMovies(query, page),
+    {
+      enabled: !!query, // ⬅️ Включити, коли є пошуковий запит
+      keepPreviousData: true,
+    }
+  );
+
+  const handleSearch = (searchQuery: string) => {
+    const trimmed = searchQuery.trim();
+    if (!trimmed) {
+      toast.error('Please enter a search term.');
+      return;
+    }
+
+    setQuery(trimmed);
+    setPage(1);
+  };
+
+  const handlePageChange = ({ selected }: { selected: number }) => {
+    setPage(selected + 1);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className={styles.container}>
+      <SearchBar onSubmit={handleSearch} />
+
+      {isLoading && <Loader />}
+      {isError && <p className={styles.error}>Failed to load movies.</p>}
+
+      {data && data.results.length === 0 && !isLoading && (
+        <p className={styles.info}>No movies found for your request.</p>
+      )}
+
+      {data && data.results.length > 0 && (
+        <>
+          <MovieList movies={data.results} />
+
+          {data.total_pages > 1 && (
+            <ReactPaginate
+              pageCount={data.total_pages}
+              pageRangeDisplayed={5}
+              marginPagesDisplayed={1}
+              onPageChange={handlePageChange}
+              forcePage={page - 1}
+              containerClassName={styles.pagination}
+              activeClassName={styles.active}
+              nextLabel="→"
+              previousLabel="←"
+            />
+          )}
+        </>
+      )}
+
+      <Toaster />
+    </div>
+  );
 }
 
-export default App
+export default App;
