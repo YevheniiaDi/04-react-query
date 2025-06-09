@@ -1,3 +1,4 @@
+// src/App/App.tsx
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ReactPaginate from 'react-paginate';
@@ -16,16 +17,11 @@ function App() {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
 
-  const {
-    data,
-    isLoading,
-    isError,
-    refetch,
-  } = useQuery<TMDBSearchResponse, Error>(
+  const { data, isLoading, isError } = useQuery<TMDBSearchResponse, Error>(
     ['movies', query, page],
     () => fetchMovies(query, page),
     {
-      enabled: !!query, // ⬅️ Включити, коли є пошуковий запит
+      enabled: !!query,
       keepPreviousData: true,
     }
   );
