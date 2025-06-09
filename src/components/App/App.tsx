@@ -1,4 +1,3 @@
-// src/App/App.tsx
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ReactPaginate from 'react-paginate';
@@ -32,7 +31,6 @@ function App() {
       toast.error('Please enter a search term.');
       return;
     }
-
     setQuery(trimmed);
     setPage(1);
   };

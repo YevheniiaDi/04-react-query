@@ -34,14 +34,13 @@
   color: white;
   font-weight: bold;
 }
+
 .error {
   color: red;
   text-align: center;
-  margin-top: 16px;
 }
 
 .info {
   text-align: center;
-  margin-top: 16px;
-  font-style: italic;
+  color: #555;
 }
