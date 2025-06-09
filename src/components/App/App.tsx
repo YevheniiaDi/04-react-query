@@ -16,7 +16,12 @@ function App() {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
 
-  const { data, isLoading, isError } = useQuery<TMDBSearchResponse, Error>(
+  const {
+    data,
+    isLoading,
+    isError,
+    isFetching,
+  } = useQuery<TMDBSearchResponse, Error>(
     ['movies', query, page],
     () => fetchMovies(query, page),
     {
@@ -43,10 +48,13 @@ function App() {
     <div className={styles.container}>
       <SearchBar onSubmit={handleSearch} />
 
-      {isLoading && <Loader />}
-      {isError && <p className={styles.error}>Failed to load movies.</p>}
+      {(isLoading || isFetching) && <Loader />}
 
-      {data && data.results.length === 0 && !isLoading && (
+      {isError && (
+        <p className={styles.error}>Oops! Something went wrong. Please try again later.</p>
+      )}
+
+      {data && data.results.length === 0 && !isFetching && (
         <p className={styles.info}>No movies found for your request.</p>
       )}
 
@@ -70,7 +78,7 @@ function App() {
         </>
       )}
 
-      <Toaster />
+      <Toaster position="top-right" />
     </div>
   );
 }
