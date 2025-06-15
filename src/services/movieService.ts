@@ -1,7 +1,14 @@
 import axios from 'axios';
-import type { TMDBSearchResponse } from '../types/movie';
+import type { Movie } from '../types/movie';
 
 const BASE_URL = 'https://api.themoviedb.org/3';
+
+interface TMDBSearchResponse {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+}
 
 export const fetchMovies = async (
   query: string,
@@ -13,10 +20,10 @@ export const fetchMovies = async (
       params: {
         query,
         page,
-        language: 'en-US', // <--- додано мову
+        language: 'en-US',
       },
       headers: {
-        Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
+        Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`, // ← залишив як у тебе
       },
     }
   );

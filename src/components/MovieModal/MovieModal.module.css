@@ -8,23 +8,64 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 }
 
 .modal {
     background: white;
     padding: 24px;
-    border-radius: 8px;
-    max-width: 600px;
+    border-radius: 12px;
+    max-width: 800px;
     width: 90%;
     position: relative;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
 }
 
 .close {
     position: absolute;
     right: 12px;
-    top: 8px;
+    top: 12px;
     background: none;
     border: none;
-    font-size: 24px;
+    font-size: 28px;
+    font-weight: bold;
     cursor: pointer;
+    color: #333;
+}
+
+.backdrop {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.content {
+    display: flex;
+    gap: 20px;
+}
+
+.poster {
+    width: 150px;
+    height: auto;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.content>div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+h2 {
+    margin: 0;
+}
+
+p {
+    margin: 4px 0;
+    line-height: 1.4;
 }
