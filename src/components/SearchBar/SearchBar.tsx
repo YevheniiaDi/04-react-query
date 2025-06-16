@@ -1,12 +1,11 @@
-import React from 'react';
 import { toast } from 'react-hot-toast';
 import css from './SearchBar.module.css';
 
 interface SearchBarProps {
-  action: (query: string) => void;
+  onSearch: (query: string) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ action }) => {
+const SearchBar = ({ onSearch }: SearchBarProps) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -19,8 +18,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ action }) => {
       return;
     }
 
-    action(query);
-    form.reset(); 
+    onSearch(query);
+    form.reset();
   };
 
   return (

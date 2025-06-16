@@ -28,7 +28,7 @@ function App() {
     queryKey: ['movies', query, page],
     queryFn: () => fetchMovies(query, page),
     enabled: !!query,
-    placeholderData: (prev) => prev,
+    placeholderData: (prev: TMDBSearchResponse | undefined) => prev,
   });
 
   const handleSearch = (searchQuery: string) => {
@@ -61,7 +61,7 @@ function App() {
 
   return (
     <div className={styles.container}>
-      <SearchBar onSubmit={handleSearch} />
+      <SearchBar onSearch={handleSearch} />
 
       {(isLoading || isFetching) && <Loader />}
 
