@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './MovieGrid.module.css';
-import { Movie } from '../../types/movie';
+import type { Movie } from '../../types/movie'; // 👈 тип-only імпорт
 
 interface MovieGridProps {
   movies: Movie[];
@@ -16,7 +16,10 @@ const MovieGrid: React.FC<MovieGridProps> = ({ movies, onSelect }) => {
           className={styles.card}
           onClick={() => onSelect(movie)}
         >
-          <img src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`} alt={movie.title} />
+          <img
+            src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+            alt={movie.title}
+          />
           <h3>{movie.title}</h3>
         </div>
       ))}
